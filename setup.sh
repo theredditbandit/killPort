@@ -1,9 +1,3 @@
-echo "cloning the repo"
-
-git clone --recurse-submodules https://github.com/theredditbandit/killPort.git
-
-echo "########################################################################"
-
 echo "updating . . ."
 sudo apt update -y
 echo "########################################################################"

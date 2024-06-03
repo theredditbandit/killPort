@@ -1,0 +1,3 @@
+ksp/bpf/dicmp_kern.ll
+ksp/bpf/dicmp_kern.o
+usp/dicmp

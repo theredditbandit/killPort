@@ -39,7 +39,7 @@ func main() {
 	if prog == nil {
 		panic("No program named 'xdp_dicmp' found in collection")
 	}
-	iface := "wlo1"
+	iface := "eth0"
 	if iface == "" {
 		panic("No interface specified. Please set the INTERFACE environment variable to the name of the interface to be use")
 	}

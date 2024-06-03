@@ -18,7 +18,7 @@ struct perf_trace_event
 #define TYPE_DROP 2
 #define TYPE_PASS 3
 
-#define BLOCKED_PORT 22
+#define BLOCKED_PORT 80
 
 struct
 {

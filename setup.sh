@@ -26,4 +26,13 @@ cd /root/killPort/usp/
 go mod tidy
 echo "########################################################################"
 
+echo "downloading zellij"
+cd /root
+mkdir dl
+cd dl
+wget https://github.com/zellij-org/zellij/releases/download/v0.40.1/zellij-x86_64-unknown-linux-musl.tar.gz
+tar -xvzf zellij-x86_64-unknown-linux-musl.tar.gz
+echo "########################################################################"
+
 echo "setup complete!"
+

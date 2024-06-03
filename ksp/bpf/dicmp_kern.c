@@ -7,25 +7,25 @@
 #include <bpf_helpers.h>
 #include <bpf_endian.h>
 
-struct perf_trace_event
-{
-    __u64 timestamp;
-    __u32 processing_time_ns;
-    __u8 type;
-};
-
-#define TYPE_ENTER 1
-#define TYPE_DROP 2
-#define TYPE_PASS 3
-
-#define BLOCKED_PORT 80
-
-struct
-{
-    __uint(type, BPF_MAP_TYPE_PERF_EVENT_ARRAY);
-    __uint(key_size, sizeof(__u32));
-    __uint(value_size, sizeof(__u32));
-} output_map SEC(".maps");
+// struct perf_trace_event
+// {
+//     __u64 timestamp;
+//     __u32 processing_time_ns;
+//     __u8 type;
+// };
+//
+// #define TYPE_ENTER 1
+// #define TYPE_DROP 2
+// #define TYPE_PASS 3
+//
+// #define BLOCKED_PORT 80
+//
+// struct
+// {
+//     __uint(type, BPF_MAP_TYPE_PERF_EVENT_ARRAY);
+//     __uint(key_size, sizeof(__u32));
+//     __uint(value_size, sizeof(__u32));
+// } output_map SEC(".maps");
 
 SEC("xdp")
 int packet_filter(struct xdp_md *ctx)
@@ -63,7 +63,6 @@ int packet_filter(struct xdp_md *ctx)
         // Drop packet
         return XDP_DROP;
     }
-
     // Allow packet to pass
     return XDP_PASS;
 }

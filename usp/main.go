@@ -35,13 +35,9 @@ func main() {
 		panic(fmt.Sprintf("Failed to create new collection: %v\n", err))
 	}
 	defer coll.Close()
-	// prog := coll.Programs["xdp_dicmp"]
-	// if prog == nil {
-	// 	panic("No program named 'xdp_dicmp' found in collection")
-	// }
 	prog := coll.Programs["packet_filter"]
 	if prog == nil {
-		panic("no program named packet_filter found in collection")
+		panic("No program named 'xdp_dicmp' found in collection")
 	}
 	iface := "eth0"
 	if iface == "" {

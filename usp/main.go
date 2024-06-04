@@ -35,7 +35,9 @@ func main() {
 		panic(fmt.Sprintf("Failed to create new collection: %v\n", err))
 	}
 	defer coll.Close()
+
 	prog := coll.Programs["xdp_dicmp"]
+
 	if prog == nil {
 		panic("No program named 'xdp_dicmp' found in collection")
 	}
@@ -58,6 +60,7 @@ func main() {
 	}
 	defer lnk.Close()
 	fmt.Println("Successfully loaded and attached BPF program.")
+
 	// handle perf events
 	outputMap, ok := coll.Maps["output_map"]
 	if !ok {

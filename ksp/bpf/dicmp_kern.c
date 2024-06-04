@@ -28,6 +28,7 @@ struct
 } output_map SEC(".maps");
 
 SEC("xdp")
+
 int xdp_dicmp(struct xdp_md *ctx)
 {
     struct perf_trace_event e = {};
@@ -107,7 +108,7 @@ int xdp_dicmp(struct xdp_md *ctx)
         return XDP_PASS;
     }
 
-    // Check if the destination port is 443
+    // Check if the destination port is the blocked port
     if (tcp->dest == __constant_htons(BLOCKED_PORT))
     {
         // Drop packet

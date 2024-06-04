@@ -7,13 +7,13 @@ sudo apt install -y build-essential clang llvm libelf-dev golang-go
 echo "########################################################################"
 
 echo "installing bpftool . .  ."
-cd /root/killPort/bpftool/src
+cd /home/dev/killport/bpftool/src
 make
 sudo make install
 echo "########################################################################"
 
 echo "installing libpf . . "
-cd /root/killPort/libbpf/src
+cd /home/dev/killport/libbpf/src
 make
 echo "########################################################################"
 
@@ -22,8 +22,17 @@ sudo ln -s /usr/include/x86_64-linux-gnu/asm /usr/include/asm
 echo "########################################################################"
 
 echo "installing go deps"
-cd /root/killPort/usp/
+cd /home/dev/killport/usp/
 go mod tidy
 echo "########################################################################"
 
+echo "downloading zellij"
+cd /home/dev/killport
+mkdir dl
+cd dl
+wget https://github.com/zellij-org/zellij/releases/download/v0.40.1/zellij-x86_64-unknown-linux-musl.tar.gz
+tar -xvzf zellij-x86_64-unknown-linux-musl.tar.gz
+echo "########################################################################"
+
 echo "setup complete!"
+

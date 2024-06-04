@@ -1,6 +1,7 @@
 echo "compiling ksp"
 
-cd /home/dev/killport/ksp/bpf/
+cd /home/dev/killport/ksp/bpf
+
 
 clang -S \
     -g \

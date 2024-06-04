@@ -35,7 +35,9 @@ func main() {
 		panic(fmt.Sprintf("Failed to create new collection: %v\n", err))
 	}
 	defer coll.Close()
-	prog := coll.Programs["packet_filter"]
+
+	prog := coll.Programs["xdp_dicmp"]
+
 	if prog == nil {
 		panic("No program named 'xdp_dicmp' found in collection")
 	}

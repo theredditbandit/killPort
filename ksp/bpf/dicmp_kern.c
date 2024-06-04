@@ -18,7 +18,7 @@ struct perf_trace_event
 #define TYPE_DROP 2
 #define TYPE_PASS 3
 
-#define BLOCKED_PORT 443
+#define BLOCKED_PORT 80
 
 struct
 {
@@ -29,73 +29,6 @@ struct
 
 SEC("xdp")
 int xdp_dicmp(struct xdp_md *ctx)
-{
-
-    struct perf_trace_event e = {};
-    // Perf event for entering xdp program
-    e.timestamp = bpf_ktime_get_ns();
-    e.type = TYPE_ENTER;
-    e.processing_time_ns = 0;
-    bpf_perf_event_output(ctx, &output_map, BPF_F_CURRENT_CPU, &e, sizeof(e));
-
-    void *data = (void *)(long)ctx->data;         // start of packet data
-    void *data_end = (void *)(long)ctx->data_end; // end of packet data
-
-    struct ethhdr *eth = data;                   // ethernet header
-    if (data + sizeof(struct ethhdr) > data_end) // check if packet has ethernet header
-    {
-        e.type = TYPE_DROP;
-        __u64 ts = bpf_ktime_get_ns();
-        e.processing_time_ns = ts - e.timestamp;
-        e.timestamp = ts;
-        bpf_perf_event_output(ctx, &output_map, BPF_F_CURRENT_CPU, &e, sizeof(e));
-        return XDP_DROP;
-    }
-
-    if (bpf_ntohs(eth->h_proto) != ETH_P_IP) // check if ethernet header is ipv4
-    {
-        e.type = TYPE_PASS;
-        __u64 ts = bpf_ktime_get_ns();
-        e.processing_time_ns = ts - e.timestamp;
-        e.timestamp = ts;
-        bpf_perf_event_output(ctx, &output_map, BPF_F_CURRENT_CPU, &e, sizeof(e));
-        return XDP_PASS;
-    }
-
-    struct iphdr *iph = data + sizeof(struct ethhdr);                   // ip header
-    if (data + sizeof(struct ethhdr) + sizeof(struct iphdr) > data_end) // check if packet has ip header
-    {
-        e.type = TYPE_DROP;
-        __u64 ts = bpf_ktime_get_ns();
-        e.processing_time_ns = ts - e.timestamp;
-        e.timestamp = ts;
-        bpf_perf_event_output(ctx, &output_map, BPF_F_CURRENT_CPU, &e, sizeof(e));
-        return XDP_DROP;
-    }
-    // This is a ping packet
-    if (iph->protocol == IPPROTO_ICMP)
-    {                                    // check if ip header is icmp
-        bpf_printk("Got ICMP packet\n"); // print to kernel log
-        e.type = TYPE_DROP;
-        __u64 ts = bpf_ktime_get_ns();
-        e.processing_time_ns = ts - e.timestamp;
-        e.timestamp = ts;
-        bpf_perf_event_output(ctx, &output_map, BPF_F_CURRENT_CPU, &e, sizeof(e));
-        return XDP_DROP;
-    }
-
-    if (iph->protocol == IPPROTO_TCP)   // check if ip header is tcp
-        bpf_printk("Got TCP packet\n"); // print to kernel log
-
-    e.type = TYPE_PASS;
-    __u64 ts = bpf_ktime_get_ns();
-    e.processing_time_ns = ts - e.timestamp;
-    e.timestamp = ts;
-    bpf_perf_event_output(ctx, &output_map, BPF_F_CURRENT_CPU, &e, sizeof(e));
-    return XDP_PASS;
-}
-
-int packet_filter(struct xdp_md *ctx)
 {
     // Pointers to packet data
     void *data_end = (void *)(long)ctx->data_end;

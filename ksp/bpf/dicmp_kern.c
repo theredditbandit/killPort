@@ -18,7 +18,7 @@ struct perf_trace_event
 #define TYPE_DROP 2
 #define TYPE_PASS 3
 
-#define BLOCKED_PORT 80
+#define BLOCKED_PORT 443
 
 struct
 {
@@ -37,34 +37,40 @@ int xdp_dicmp(struct xdp_md *ctx)
     // Parse Ethernet header
     struct ethhdr *eth = data;
     if ((void *)(eth + 1) > data_end)
+        bpf_perf_event_output(ctx, &output_map, BPF_F_CURRENT_CPU, &e, sizeof(e));
         return XDP_PASS;
 
     // Only handle IPv4 packets
     if (eth->h_proto != __constant_htons(ETH_P_IP))
+        bpf_perf_event_output(ctx, &output_map, BPF_F_CURRENT_CPU, &e, sizeof(e));
         return XDP_PASS;
 
     // Parse IP header
     struct iphdr *ip = data + sizeof(*eth);
     if ((void *)(ip + 1) > data_end)
+        bpf_perf_event_output(ctx, &output_map, BPF_F_CURRENT_CPU, &e, sizeof(e));
         return XDP_PASS;
 
     // Only handle TCP packets
     if (ip->protocol != IPPROTO_TCP)
+        bpf_perf_event_output(ctx, &output_map, BPF_F_CURRENT_CPU, &e, sizeof(e));
         return XDP_PASS;
 
     // Parse TCP header
     struct tcphdr *tcp = (void *)ip + ip->ihl * 4;
     if ((void *)(tcp + 1) > data_end)
+        bpf_perf_event_output(ctx, &output_map, BPF_F_CURRENT_CPU, &e, sizeof(e));
         return XDP_PASS;
 
     // Check if the destination port is 443
     if (tcp->dest == __constant_htons(BLOCKED_PORT))
     {
+        bpf_perf_event_output(ctx, &output_map, BPF_F_CURRENT_CPU, &e, sizeof(e));
         // Drop packet
         return XDP_DROP;
     }
-
     // Allow packet to pass
+    bpf_perf_event_output(ctx, &output_map, BPF_F_CURRENT_CPU, &e, sizeof(e));
     return XDP_PASS;
 }
 

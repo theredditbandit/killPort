@@ -39,10 +39,6 @@ func main() {
 	if prog == nil {
 		panic("No program named 'xdp_dicmp' found in collection")
 	}
-	// prog := coll.Programs["packet_filter"]
-	// if prog == nil {
-	// 	panic("no program named packet_filter found in collection")
-	// }
 	iface := "eth0"
 	if iface == "" {
 		panic("No interface specified. Please set the INTERFACE environment variable to the name of the interface to be use")

@@ -2,5 +2,4 @@
 
 Drop packets using eBPF.
 
-# Problem statement 3
-![problemStatement3.md](problemStatement3.md)
+# [Problem 3 solution ](problemStatement3.md)
